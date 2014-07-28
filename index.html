@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>simpleDialog</title>
+        <link rel="stylesheet" href="css/simpleDialog.css"/>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="js/simpleDialog.js"></script>
+        <script>
+            $(function() {
+                $("#open").on("click", function() {
+                    var content = "Hello World!";
+                    var options = {
+                        content : content,
+                        width : 200,
+                        height : 100
+                    }
+                    var dialog = $("#dialog").simpleDialog(options);
+                    dialog.dialogOpen();
+                });
+
+                // 可用前端模板生成内容
+                var user = {
+                    "name" : "Jack",
+                    "sex" : "male",
+                    "age" : 24
+                };
+
+                $("#btn").on("click", function() {
+                    var content = $("#template").html();
+                    content = content.replace(/{([\w$]+)}/g, function(str, key){
+                        return user[key];
+                    });
+                    console.log(content)
+                    var options = {
+                        content : content
+                    }
+                    var dialog = $("#temp").simpleDialog(options);
+                    dialog.dialogOpen();
+                });
+
+                // 关闭前回调
+                $("#btn2").on("click", function() {
+                    var content = "点击右上角的关闭按钮";
+                    var options = {
+                        content : content,
+                        width : 200,
+                        height : 100,
+                        beforeClose : fn
+                    }
+                    var dialog = $("#callback").simpleDialog(options);
+                    dialog.dialogOpen();
+                });
+
+                function fn() {
+                    alert("关闭前调用了我！");
+                }
+            });
+        </script>
+        <script type="template" id="template">
+            <div>
+                <form action="">
+                    <fieldset>
+                        <legend>用户信息</legend>
+                        <label for="name">姓名：</label>
+                        <input type="text" id="name" value="{name}" />
+                        <label for="sex">性别</label>
+                        <input type="text" id="sex" value="{sex}" />
+                        <label for="age">年龄</label>
+                        <input type="text" id="age" value="{age}" />
+                        <input type="submit" id="submit" value="提交" />
+                    </fieldset>
+                </form>
+            </div>
+        </script>
+    </head>
+    <body style="height:1000px;">
+        <button type="button" id="open">点击</button>
+        <div id="dialog"></div>
+        <button type="button" id="btn">点击（模板）</button>
+        <div id="temp"></div>
+        <button type="button" id="btn2">点击（关闭前回调）</button>
+        <div id="callback"></div>
+    </body>
+</html>
