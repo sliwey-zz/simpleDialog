@@ -83,9 +83,8 @@
 
         obj.css("cursor", "move");
         obj.on("mousedown", function(event) {
-            var e = event || window.event;
-            temX = e.pageX - _this.offset().left;
-            temY = e.pageY - _this.offset().top;
+            temX = event.pageX - _this.offset().left;
+            temY = event.pageY - _this.offset().top;
             moveable = true;
         });
 
@@ -96,10 +95,9 @@
                 }
             },
             mousemove : function(event) {
-                var e = event || window.event;
                 if (moveable) {
-                    var left = e.pageX - temX,
-                        top = e.pageY - temY,
+                    var left = event.pageX - temX,
+                        top = event.pageY - temY,
                         w = _this.width(),
                         h = _this.height();
 
@@ -115,7 +113,7 @@
                             : top;
                     _this.css({"left" : left, "top" : top, "margin" : 0});
                 }
-                return e.preventDefault();
+                return event.preventDefault();
             }
         });
     };
@@ -137,23 +135,24 @@
             left,
             top,
             mWidth = _this.css("min-width").slice(0, -2),
-            mHeight = _this.css("min-height").slice(0, -2);
+            mHeight = _this.css("min-height").slice(0, -2),
+            temp = '';
 
-        _this.append("<div class=\"n-resize\"></div>")
-             .append("<div class=\"s-resize\"></div>")
-             .append("<div class=\"w-resize\"></div>")
-             .append("<div class=\"e-resize\"></div>")
-             .append("<div class=\"nw-resize\"></div>")
-             .append("<div class=\"ne-resize\"></div>")
-             .append("<div class=\"sw-resize\"></div>")
-             .append("<div class=\"se-resize\"></div>");
+        temp = "<div class=\"n-resize\"></div>"
+             + "<div class=\"s-resize\"></div>"
+             + "<div class=\"w-resize\"></div>"
+             + "<div class=\"e-resize\"></div>"
+             + "<div class=\"nw-resize\"></div>"
+             + "<div class=\"ne-resize\"></div>"
+             + "<div class=\"sw-resize\"></div>"
+             + "<div class=\"se-resize\"></div>";
+        _this.append(temp);
 
         for (var i = 0; i < length; i++) {
             (function(i){
                 $("." + typeList[i] + "-resize").on("mousedown", function(event) {
-                    var e = event || window.event;
-                    temX = e.pageX;
-                    temY = e.pageY;
+                    temX = event.pageX;
+                    temY = event.pageY;
                     top = _this.offset().top;
                     left = _this.offset().left;
                     type = typeList[i];
@@ -173,17 +172,16 @@
                 }
             },
             mousemove : function(event) {
-                var e = event || window.event;
                 var docWidth = $(document).width(),
                     docHeight = $(document).height();
 
                 if (resizeable) {
-                    var w = e.pageX - temX,
-                        h = e.pageY - temY;
+                    var w = event.pageX - temX,
+                        h = event.pageY - temY;
 
                     changeSize[type](w, h, docWidth, docHeight);
                 }
-                return e.preventDefault();
+                return event.preventDefault();
             }
         });
 
